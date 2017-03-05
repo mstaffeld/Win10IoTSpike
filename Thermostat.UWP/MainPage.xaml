@@ -1,0 +1,22 @@
+﻿<Page
+    x:Class="Thermostat.UWP.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Thermostat.UWP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+
+            <Button x:Name="MainPower" Content="Power On"  Margin="10" HorizontalAlignment="Center" Click="MainPower_Click"/>
+            <Button x:Name="HeatMode" Content="Heat"  Margin="10" HorizontalAlignment="Center" Click="HeatMode_Click"/>
+            <Button x:Name="CoolMode" Content="Cool"  Margin="10" HorizontalAlignment="Center" Click="CoolMode_Click"/>
+            <TextBox x:Name="SetTemp" Text="67" TextAlignment="Center" FontSize="36" FontWeight="ExtraBlack"></TextBox>
+            <Button x:Name="RaiseTemp" Content="UP" Margin="5" Click="RaiseTemp_OnClick"></Button>
+            <Button x:Name="LowerTemp" Content="DN" Margin="5" Click="LowerTemp_OnClickTemp_OnClick"></Button>
+
+        </StackPanel>
+    </Grid>
+</Page>
