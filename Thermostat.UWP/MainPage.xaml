@@ -8,15 +8,28 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel HorizontalAlignment="Left">
+                <Button x:Name="MainPower" Content="Power On"  Margin="10" HorizontalAlignment="Right" Click="MainPower_Click"/>
+                <Button x:Name="HeatMode" Content="Heat"  Margin="10" HorizontalAlignment="Right" Click="HeatMode_Click"/>
+                <Button x:Name="CoolMode" Content="Cool"  Margin="10" HorizontalAlignment="Right" Click="CoolMode_Click"/>
+            </StackPanel>
+            <StackPanel Margin="40,0,0,0">
+                <StackPanel>
+                    <Border BorderThickness="2" BorderBrush="Black">
+                        <TextBlock x:Name="SetTemp" Text="67" TextAlignment="Center" FontSize="36" FontWeight="ExtraBlack" Width="60"/>
+                    </Border>
+                </StackPanel>
+        
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button x:Name="RaiseTemp" Content="UP" Margin="5" HorizontalAlignment="Center" Click="RaiseTemp_OnClick"/>
+                    <Button x:Name="LowerTemp" Content="DN" Margin="5" HorizontalAlignment="Center" Click="LowerTemp_OnClick"/>
+                </StackPanel>
+                
+            </StackPanel>
 
-            <Button x:Name="MainPower" Content="Power On"  Margin="10" HorizontalAlignment="Center" Click="MainPower_Click"/>
-            <Button x:Name="HeatMode" Content="Heat"  Margin="10" HorizontalAlignment="Center" Click="HeatMode_Click"/>
-            <Button x:Name="CoolMode" Content="Cool"  Margin="10" HorizontalAlignment="Center" Click="CoolMode_Click"/>
-            <TextBox x:Name="SetTemp" Text="67" TextAlignment="Center" FontSize="36" FontWeight="ExtraBlack"></TextBox>
-            <Button x:Name="RaiseTemp" Content="UP" Margin="5" Click="RaiseTemp_OnClick"></Button>
-            <Button x:Name="LowerTemp" Content="DN" Margin="5" Click="LowerTemp_OnClickTemp_OnClick"></Button>
 
         </StackPanel>
+
     </Grid>
 </Page>

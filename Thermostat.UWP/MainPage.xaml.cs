@@ -1,47 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+
+using Thermostat.Data;
+
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 namespace Thermostat.UWP
 {
-    using System.Threading.Tasks;
+    using Devices.RaspberryPi;
 
-    using Windows.Devices.Gpio;
-
-    using Thermostat.Data;
-
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
-        private const int POWER_PIN = 5;
-        private GpioPin powerPin;
-        private GpioPinValue powerPinValue;
-        
-        private const int COOLING_PIN = 6;
-        private GpioPin coolingPin;
-        private GpioPinValue coolingPinValue;
-
-        private const int HEATING_PIN = 12;
-        private GpioPin heatingPin;
-        private GpioPinValue heatingPinValue;
-
         private bool PowerIsOn;
 
+        private readonly IGpioService pinService;
         private FurnaceState furnaceState = FurnaceState.Disabled;
 
         public MainPage()
@@ -50,9 +22,17 @@ namespace Thermostat.UWP
 
             this.InitControls();
 
-            this.InitPowerPin();
-            this.InitCoolingPin();
-            this.InitHeatingPin();
+            // poor mans feature toggle, need to do some more setup yet
+            bool hardwareConnected = false;
+            if (hardwareConnected)
+            {
+                this.pinService = new GpioService();
+                this.pinService.Init();
+            }
+            else
+            {
+                this.pinService = new Devices.Fakes.GpioService();
+            }
         }
 
         private void InitControls()
@@ -91,43 +71,7 @@ namespace Thermostat.UWP
 
         private void ToggleMainPowerLed()
         {
-            if (this.PowerIsOn)
-            {
-                this.powerPinValue = GpioPinValue.High;
-                this.powerPin.Write(this.powerPinValue);
-            }
-            else
-            {
-                this.powerPinValue = GpioPinValue.Low;
-                this.powerPin.Write(this.powerPinValue);
-            }
-        }
-
-        private void InitPowerPin()
-        {
-            var gpio = GpioController.GetDefault();
-            this.powerPin = gpio.OpenPin(POWER_PIN);
-            this.powerPinValue = GpioPinValue.Low;
-            this.powerPin.Write(this.powerPinValue);
-            this.powerPin.SetDriveMode(GpioPinDriveMode.Output);
-        }
-
-        private void InitCoolingPin()
-        {
-            var gpio = GpioController.GetDefault();
-            this.coolingPin = gpio.OpenPin(COOLING_PIN);
-            this.coolingPinValue = GpioPinValue.Low;
-            this.coolingPin.Write(this.coolingPinValue);
-            this.coolingPin.SetDriveMode(GpioPinDriveMode.Output);
-        }
-
-        private void InitHeatingPin()
-        {
-            var gpio = GpioController.GetDefault();
-            this.heatingPin = gpio.OpenPin(HEATING_PIN);
-            this.heatingPinValue = GpioPinValue.Low;
-            this.heatingPin.Write(this.heatingPinValue);
-            this.heatingPin.SetDriveMode(GpioPinDriveMode.Output);
+            this.pinService.SetPowerPinOn(this.PowerIsOn);
         }
 
         private void HeatMode_Click(object sender, RoutedEventArgs e)
@@ -156,30 +100,12 @@ namespace Thermostat.UWP
 
         private void ToggleHeatingPin()
         {
-            if (this.furnaceState == FurnaceState.Heating)
-            {
-                this.heatingPinValue = GpioPinValue.High;
-                this.heatingPin.Write(this.heatingPinValue);
-            }
-            else
-            {
-                this.heatingPinValue = GpioPinValue.Low;
-                this.heatingPin.Write(this.heatingPinValue);
-            }
+            this.pinService.SetHeatingPinOn(this.furnaceState == FurnaceState.Heating);
         }
 
         private void ToggleCoolingPin()
         {
-            if (this.furnaceState == FurnaceState.Cooling)
-            {
-                this.coolingPinValue = GpioPinValue.High;
-                this.coolingPin.Write(this.coolingPinValue);
-            }
-            else
-            {
-                this.coolingPinValue = GpioPinValue.Low;
-                this.coolingPin.Write(this.coolingPinValue);
-            }
+            this.pinService.SetCoolingPinOn(this.furnaceState == FurnaceState.Cooling);
         }
 
         private void RaiseTemp_OnClick(object sender, RoutedEventArgs e)
@@ -187,7 +113,7 @@ namespace Thermostat.UWP
             throw new NotImplementedException();
         }
 
-        private void LowerTemp_OnClickTemp_OnClick(object sender, RoutedEventArgs e)
+        private void LowerTemp_OnClick(object sender, RoutedEventArgs e)
         {
             throw new NotImplementedException();
         }
