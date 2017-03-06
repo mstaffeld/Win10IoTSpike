@@ -16,11 +16,29 @@ namespace Thermostat.UWP
         private readonly IGpioService pinService;
         private FurnaceState furnaceState = FurnaceState.Disabled;
 
+        private int desiredTemperatureF;
+
+        public int DesiredTemperatureF
+        {
+            get
+            {
+                return this.desiredTemperatureF;
+            }
+
+            set
+            {
+                this.desiredTemperatureF = value;
+                this.SetTemp.Text = this.desiredTemperatureF.ToString();
+            }
+        }
+
         public MainPage()
         {
             this.InitializeComponent();
 
             this.InitControls();
+
+            this.DesiredTemperatureF = 67; // 2 digit max?
 
             // poor mans feature toggle, need to do some more setup yet
             bool hardwareConnected = false;
@@ -110,12 +128,12 @@ namespace Thermostat.UWP
 
         private void RaiseTemp_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            this.DesiredTemperatureF += 1;
         }
 
         private void LowerTemp_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            this.DesiredTemperatureF -= 1;
         }
     }
 }
