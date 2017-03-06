@@ -26,6 +26,8 @@
                 </StackPanel>
             </StackPanel>
         </StackPanel>
-
+        <StackPanel Orientation="Vertical">
+            <TextBox FontSize="10" Background="Gray" Height="150" TextWrapping="Wrap" AcceptsReturn="True" Name="LogOutput" TextChanged="LogOutput_OnTextChanged"/>
+        </StackPanel>
     </Grid>
 </Page>
