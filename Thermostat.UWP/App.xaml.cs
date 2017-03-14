@@ -14,6 +14,9 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using SimpleInjector;
+using Thermostat.Devices.RaspberryPi;
+using Thermostat.UWP.IoC;
 
 namespace Thermostat.UWP
 {
@@ -22,12 +25,16 @@ namespace Thermostat.UWP
     /// </summary>
     sealed partial class App : Application
     {
+        private Container container;
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
         public App()
         {
+            container = Bootstrapper.Bootstrap();
+
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
@@ -73,6 +80,7 @@ namespace Thermostat.UWP
                     // configuring the new page by passing required information as a navigation
                     // parameter
                     rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    //rootFrame.Navigate(new MainPage(this.container.GetInstance<IGpioService>()), e.Arguments);
                 }
                 // Ensure the current window is active
                 Window.Current.Activate();
